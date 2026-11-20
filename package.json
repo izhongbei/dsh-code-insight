@@ -1,0 +1,84 @@
+{
+  "name": "dsh-code-insight",
+  "version": "0.1.0",
+  "description": "Code Insight for DeepSeek Harness: a persistent, incrementally updated C/C++ symbol index powering search, go-to-definition, find-references, callers/callees, call graphs and a browser panel.",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "code-insight",
+    "source-insight",
+    "code-navigation",
+    "call-graph",
+    "symbol",
+    "c",
+    "cpp"
+  ],
+  "homepage": "https://github.com/izhongbei/dsh-code-insight#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/izhongbei/dsh-code-insight.git"
+  },
+  "bugs": {
+    "url": "https://github.com/izhongbei/dsh-code-insight/issues"
+  },
+  "author": "izhongbei",
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "lib/manager.js",
+    "lib/tools.js",
+    "lib/routes.js",
+    "lib/vendor/package.json",
+    "lib/vendor/UPSTREAM.json",
+    "lib/vendor/src/**/*.js",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "NOTICE",
+    "THIRD_PARTY_LICENSES.md",
+    "PUBLISHING.md"
+  ],
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0",
+    "dsh": ">=0.2.1-rc.2 || >=0.2.2-rc.1"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "~4.0.5",
+    "@deepseek-ai/dsh-tools": ">=0.2.1-rc.2 || >=0.2.2-rc.1",
+    "@deepseek-ai/schemastery": "^3.18.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar-right",
+        "@deepseek-ai/dsh-client-ui-input-trigger",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build-core.mjs",
+    "test": "node test/smoke.mjs && node test/routes.test.mjs && node test/client.test.mjs",
+    "prepublishOnly": "npm test"
+  }
+}

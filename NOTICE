@@ -1,0 +1,21 @@
+# NOTICE
+
+`dsh-code-insight` is a DeepSeek Harness plugin built on top of **Code Insight**,
+the C/C++ symbol indexer shipped as the `code-insight` VS Code extension.
+
+The directory `lib/vendor/src/core/**` and `lib/vendor/src/shared/**` in this
+package is a **compiled copy** of the upstream extension's `src/core` and
+`src/shared` TypeScript modules (compiled to CommonJS by
+`scripts/build-core.mjs`; the upstream modules themselves are unmodified).
+The exact upstream version and commit are recorded in
+`lib/vendor/UPSTREAM.json`.
+
+Upstream:
+
+- Project: code-insight (VS Code extension)
+- Repository: https://github.com/izhongbei/cinsight
+- License: MIT (see `THIRD_PARTY_LICENSES.md`)
+
+Everything else in this package (`index.js`, `client.js`, `lib/manager.js`,
+`lib/tools.js`, `lib/routes.js`, tests and scripts) is original work by the
+`dsh-code-insight` authors, also MIT licensed (see `LICENSE`).

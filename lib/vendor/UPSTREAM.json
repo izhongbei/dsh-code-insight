@@ -1,0 +1,9 @@
+{
+  "project": "code-insight (VS Code extension)",
+  "repository": "https://github.com/izhongbei/cinsight",
+  "version": "0.9.1",
+  "commit": "06c903cd758d032bb6cabc5ec679f04d34b654d6",
+  "commitDate": "2026-11-20T13:56:05+08:00",
+  "builtAt": "2026-11-20T09:56:54.140Z",
+  "note": "lib/vendor/src/{core,shared} is a compiled copy of the upstream src/{core,shared} (MIT)."
+}

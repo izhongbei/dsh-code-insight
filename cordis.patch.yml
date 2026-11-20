@@ -1,0 +1,5 @@
+# Bundle patch layer: mount the Code Insight host plugin. It registers the
+# model-facing `code_insight_*` tools; there is no client (browser) half.
+- insert:
+    - id: code-insight
+      name: dsh-code-insight

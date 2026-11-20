@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["ES2022"],
+    "rootDir": "../vscode-source-insight",
+    "outDir": "lib/vendor",
+    "strict": true,
+    "noImplicitOverride": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "declaration": false,
+    "typeRoots": ["../vscode-source-insight/node_modules/@types"],
+    "types": ["node"]
+  },
+  "include": [
+    "../vscode-source-insight/src/core/**/*.ts",
+    "../vscode-source-insight/src/shared/**/*.ts"
+  ]
+}
