@@ -51,8 +51,19 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          NOTES_FILE="$RUNNER_TEMP/release-notes.md"
+          awk -v ver="$VERSION" '
+            $0 ~ "^## \\[" ver "\\]" { found = 1 }
+            found && $0 ~ /^## \\[/ && $0 !~ "^## \\[" ver "\\]" { exit }
+            found { print }
+          ' CHANGELOG.md > "$NOTES_FILE"
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             echo "release already exists: $GITHUB_REF_NAME"
+            exit 0
+          fi
+          if [ -s "$NOTES_FILE" ]; then
+            gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file "$NOTES_FILE"
           else
             gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --generate-notes
           fi

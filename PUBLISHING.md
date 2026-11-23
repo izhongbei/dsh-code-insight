@@ -82,6 +82,10 @@ Or publish by hand (needs 2FA / a bypass-2FA token as above):
 npm publish --access public --otp=123456
 ```
 
+The publish workflow creates the GitHub Release from the matching `## [x.y.z]` section of
+`CHANGELOG.md`, so keep that section up to date before tagging. Add the `NPM_TOKEN` repository secret
+(Settings → Secrets and variables → Actions) for automatic publishing.
+
 ## 3. Submit to the community plugin market
 
 The built-in *Plugins → Discover* index is the community catalog
