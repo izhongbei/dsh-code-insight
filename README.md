@@ -1,5 +1,6 @@
 # dsh-code-insight
 
+[![ci](https://github.com/izhongbei/dsh-code-insight/actions/workflows/ci.yml/badge.svg)](https://github.com/izhongbei/dsh-code-insight/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/dsh-code-insight.svg)](https://www.npmjs.com/package/dsh-code-insight)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -169,6 +170,7 @@ After pulling changes from the extension:
 
 ```bash
 cd tools/dsh-code-insight
+npm install            # devDependencies: the harness packages the tests resolve against
 npm run build          # = node scripts/build-core.mjs
 npm test               # smoke + routes + client suites, no dsh boot
 ```
@@ -189,6 +191,10 @@ The three test suites need no DSH boot:
   panel with a mocked `fetch`, and verifies tab/body/`@`-source registration, the SVG call graph, and that clicking a
   result calls `openResource` with a session-scoped address and the 1-based line.
 
+The suites resolve `@deepseek-ai/*` from the repository's devDependencies; set `DSH_INSTALL_ANCHOR` to a DSH
+installation's `package.json` to run them against that installation instead. CI runs both suites on Node 22 and 24 via
+`.github/workflows/ci.yml`; `.github/workflows/publish.yml` publishes on `v*` tags and creates the GitHub Release.
+
 ## License and attribution
 
 MIT — see [LICENSE](LICENSE). `lib/vendor/src/**` is a compiled copy of the Code Insight VS Code extension's
@@ -196,8 +202,8 @@ MIT — see [LICENSE](LICENSE). `lib/vendor/src/**` is a compiled copy of the Co
 recorded in `lib/vendor/UPSTREAM.json`, and the license text in [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)
 (see also [NOTICE](NOTICE)).
 
-Publishing notes — npm, GitHub and the community plugin catalog (one YAML file in a PR):
-[PUBLISHING.md](PUBLISHING.md).
+Publishing notes — npm, GitHub, CI/release workflows and the community plugin catalog (one YAML file in a PR):
+[PUBLISHING.md](PUBLISHING.md). Release history: [CHANGELOG.md](CHANGELOG.md).
 
 ## Limitations
 

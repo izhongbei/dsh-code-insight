@@ -45,7 +45,8 @@
     "LICENSE",
     "NOTICE",
     "THIRD_PARTY_LICENSES.md",
-    "PUBLISHING.md"
+    "PUBLISHING.md",
+    "CHANGELOG.md"
   ],
   "engines": {
     "node": "^22.19.0 || >=24.0.0",
@@ -80,5 +81,10 @@
     "build": "node scripts/build-core.mjs",
     "test": "node test/smoke.mjs && node test/routes.test.mjs && node test/client.test.mjs",
     "prepublishOnly": "npm test"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.5",
+    "@deepseek-ai/dsh-tools": "0.2.1-rc.5",
+    "@deepseek-ai/schemastery": "3.18.5"
   }
 }

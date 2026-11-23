@@ -24,23 +24,30 @@ const here = path.dirname(fileURLToPath(import.meta.url))
 const pluginRoot = path.resolve(here, '..')
 const keep = process.argv.includes('--keep')
 
-const INSTALL_ANCHOR =
-  process.env.DSH_INSTALL_ANCHOR ??
-  '/home/liujie/.npm/_npx/1e7f6d9597241db0/node_modules/@deepseek-ai/dsh/package.json'
-const requireFromInstall = createRequire(INSTALL_ANCHOR)
-
-registerHooks({
-  resolve(specifier, context, nextResolve) {
-    if (specifier.startsWith('@deepseek-ai/')) {
-      try {
-        return { url: pathToFileURL(requireFromInstall.resolve(specifier)).href, shortCircuit: true }
-      } catch {
-        // fall through to native resolution
+/**
+ * Harness package resolution.
+ *
+ * By default the test file imports `@deepseek-ai/*` natively from this
+ * repository's devDependencies (`npm install`). Set `DSH_INSTALL_ANCHOR` to a
+ * DSH installation's `package.json` to test against that installation instead
+ * (useful when the devDependencies are not installed).
+ */
+const installAnchor = process.env.DSH_INSTALL_ANCHOR
+if (typeof installAnchor === 'string' && installAnchor !== '') {
+  const requireFromInstall = createRequire(installAnchor)
+  registerHooks({
+    resolve(specifier, context, nextResolve) {
+      if (specifier.startsWith('@deepseek-ai/')) {
+        try {
+          return { url: pathToFileURL(requireFromInstall.resolve(specifier)).href, shortCircuit: true }
+        } catch {
+          // fall through to native resolution
+        }
       }
-    }
-    return nextResolve(specifier, context)
-  },
-})
+      return nextResolve(specifier, context)
+    },
+  })
+}
 
 const { Context } = await import('@deepseek-ai/cordis')
 const { validateJsonSchemaValue } = await import('@deepseek-ai/dsh-tools')

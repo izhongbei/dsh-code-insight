@@ -13,7 +13,14 @@ public repository, publish to npm, and (optionally) submit it to the community p
   MIT attribution for the compiled upstream core.
 - `@deepseek-ai/*` packages are `peerDependencies` with explicit prerelease branches (required by the catalog review;
   a bare range would silently exclude prerelease harness builds).
-- `npm test` runs all three suites; `prepublishOnly` runs it before every publish.
+- `npm test` runs all three suites; `prepublishOnly` runs it before every publish; CI
+  (`.github/workflows/ci.yml`) runs the same suites on Node 22 and 24 from the repository's
+  `@deepseek-ai` devDependencies (`npm ci`).
+- `.github/workflows/publish.yml` publishes on `v*` tags (skipping an already-published version) and creates
+  the GitHub Release; it needs an `NPM_TOKEN` repository secret — a Granular Access Token with **Bypass 2FA**
+  enabled (npm requires 2FA or such a token to publish).
+- `awesome-dsh-plugin-entry.yml` at the repository root is the catalog submission content (copy it into the
+  catalog's `data/plugins/` when opening the PR).
 - `npm pack --dry-run` ships 31 files (~100 kB packed / ~380 kB unpacked): host entry, client bundle, routes, vendored
   core, patch, docs and licenses.
 
@@ -58,11 +65,21 @@ dsh plugin --profile web add dsh-code-insight
 Restart the Host once after installing (client-module metadata is read at boot), then open the right sidebar and pick
 **Code Insight**.
 
-### Version bumps
+A first publish of a brand-new package goes through npm's **staged publishing** flow: the registry briefly shows a
+`0.0.0-stage` placeholder while the release is reviewed, then the real version appears (a few minutes in practice).
+
+### Version bumps (CI release)
 
 ```bash
-npm version patch             # 0.1.0 -> 0.1.1 (edit CHANGELOG if you add one)
-npm publish --access public
+# edit CHANGELOG.md, then:
+npm version patch             # 0.1.0 -> 0.1.1 (creates the v0.1.1 tag)
+git push && git push --tags   # publish workflow: tests -> npm publish -> GitHub Release
+```
+
+Or publish by hand (needs 2FA / a bypass-2FA token as above):
+
+```bash
+npm publish --access public --otp=123456
 ```
 
 ## 3. Submit to the community plugin market
@@ -71,15 +88,16 @@ The built-in *Plugins → Discover* index is the community catalog
 [`awesome-dsh-plugin/awesome-dsh-plugin`](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
 (served as `dsh-plugin-catalog`). Submission is one YAML file in a PR — do **not** edit the generated READMEs.
 
-Fork the catalog repository, then add `data/plugins/izhongbei__dsh-code-insight.yml`:
+The ready-made content lives at the repository root as `awesome-dsh-plugin-entry.yml`. Fork the catalog
+repository, then add it as `data/plugins/izhongbei__dsh-code-insight.yml`:
 
 ```yaml
 url: https://github.com/izhongbei/dsh-code-insight
 name: izhongbei/dsh-code-insight
 category: tools
 description:
-  en: Persistent C/C++ symbol index for DeepSeek Harness: symbol search, go-to-definition, find-references, callers/callees, call graph and a right-sidebar panel, plus @ symbol completion in the composer.
-  zh: 为 DeepSeek Harness 提供持久化 C/C++ 符号索引：符号搜索、跳转定义、引用、调用者/被调用者、调用关系图与右侧栏面板，以及输入框 @ 符号补全。
+  en: 'Persistent C/C++ symbol index for DeepSeek Harness: symbol search, go-to-definition, find-references, callers/callees, call graph and a right-sidebar panel, plus @ symbol completion in the composer.'
+  zh: '为 DeepSeek Harness 提供持久化 C/C++ 符号索引：符号搜索、跳转定义、引用、调用者/被调用者、调用关系图与右侧栏面板，以及输入框 @ 符号补全。'
 ```
 
 Then open the PR. Review criteria that matter here:
